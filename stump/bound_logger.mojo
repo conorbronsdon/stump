@@ -183,8 +183,10 @@ struct BoundLogger[L: Logger](Movable):
                     key = self.styles.key.value().render(key)
 
             # Check if there's a style for the value of a key and apply it if so,
-            # otherwise use the default style for values.
-            var value_style = self.styles.values.find(key)
+            # otherwise use the default style for values. Look the style up by
+            # the key as it arrived: `key` may already carry escape codes from
+            # the branches above, and no registered style is named that.
+            var value_style = self.styles.values.find(pair.key)
             if value_style:
                 value = value_style.value().render(value)
             else:
